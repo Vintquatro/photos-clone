@@ -1,10 +1,14 @@
-package com.jetbrains.vinta.photos.clone;
+package com.jetbrains.vinta.photos.clone.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
+@Table ("Photos")
 public class Photo {
-    private String id;
+    @Id
+    private Integer id;
 
     @NotEmpty
     private String filename;
@@ -12,7 +16,15 @@ public class Photo {
     @JsonIgnore
     private byte[] data;
 
+    private  String contentType;
 
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
 
     public byte[] getData() {
         return data;
@@ -22,11 +34,11 @@ public class Photo {
         this.data = data;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

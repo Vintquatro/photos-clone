@@ -1,6 +1,7 @@
-package com.jetbrains.vinta.photos.clone;
+package com.jetbrains.vinta.photos.clone.web;
 
-import jakarta.validation.Valid;
+import com.jetbrains.vinta.photos.clone.service.PhotoService;
+import com.jetbrains.vinta.photos.clone.model.Photo;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,9 +9,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 @RestController
 public class PhotosController {
@@ -21,18 +19,23 @@ private final PhotoService photoService;
         this.photoService = photoService;
     }
 
+
     @GetMapping("/")
     public String hello(){
         return "Hello World";
     }
 
+
+
     @GetMapping("/photos")
-    public Collection<Photo> get(){
+    public Iterable<Photo> get(){
 return photoService.get();
     }
 
+
+
     @GetMapping("/photos/{id}")
-    public Photo get(@PathVariable String id){
+    public Photo get(@PathVariable Integer id){
         Photo photo= photoService.get(id);
         if (photo==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return photoService.get(id);
@@ -40,9 +43,8 @@ return photoService.get();
 
 
     @DeleteMapping("/photos/{id}")
-    public void delete(@PathVariable String id){
-        Photo photo= photoService.remove(id);
-        if (photo==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public void delete(@PathVariable Integer id){
+        photoService.remove(id);
 
     }
 
@@ -50,7 +52,7 @@ return photoService.get();
     public Photo create(@RequestPart("data") MultipartFile file) throws IOException {
 
 
-        return photoService.save(file.getOriginalFilename(), file.getBytes());
+        return photoService.save(file.getOriginalFilename(), file.getContentType(), file.getBytes());
 
     }
 
